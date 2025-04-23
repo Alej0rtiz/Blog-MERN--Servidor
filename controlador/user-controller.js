@@ -1,5 +1,7 @@
-// Importación del modelo de usuario para interactuar con la base de datos MongoDB
+// Import del modelo de usuario para interactuar con la base de datos MongoDB
 import User from "../modelos/user.js";
+// Import de bcryptjs para el manejo seguro de contraseñas (hashing)
+import bcrypt from "bcryptjs";
 
 /*
  * Controlador para registrar un nuevo usuario
@@ -9,11 +11,17 @@ import User from "../modelos/user.js";
 export const signupUser = async (request, response) =>{
 
     try{
+        // Generación de un salt aleatorio con un coste de procesamiento de 10 rondas (bcrypt)
+        const salt = await bcrypt.genSalt(10);
+        // Se encripta la contraseña proporcionada en el cuerpo de la solicitud
+        const passwordHash = await bcrypt.hash(request.body.password, salt);
+
+
         //logs de los datos para llevar vigilancia del correcto funcionamiento
         console.log("Datos recibidos:", request.body);
 
          // Se extraen los datos del cuerpo de la solicitud
-        const userData = request.body; 
+        const userData = {username: request.body.username, nane: request.body.name, password: passwordHash};
 
         // Se crea una nueva instancia del modelo User con los datos recibidos
         const newUser = new User(userData);
