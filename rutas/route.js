@@ -5,7 +5,15 @@ import express from 'express';
 // - signupUser: lógica para registrar un nuevo usuario
 // - loginUser: lógica para autenticar al usuario existente
 import {signupUser, loginUser} from '../controlador/user-controller.js';
+// Importación de la función del controlador para la subida y bajada de imagenes
+import { SubirImagen, BajarImagen } from '../controlador/image-controller.js';
+// Importación de la función del controlador para crear un nuevo post
+import { CrearPost } from '../controlador/post-controller.js';
 
+// Importación de la función de autenticación de tokens
+import { AuthenticateToken } from '../controlador/jwt-controller.js';
+
+import subida from '../utilidades/subida.js';
 
 // ========================
 //   DEFINICIÓN DEL ROUTER
@@ -46,5 +54,44 @@ router.post('/signup', signupUser);
 router.post('/login', loginUser);
 
 
-// Exportación del router para que pueda ser utilizado en el index.js
+/*
+ * Ruta POST para subir archivos
+ * Endpoint: /file/upload
+ * Descripción:
+ *  - Se activa cuando un cliente envía un archivo a través de un formulario.
+ *  - Llama a la función SubirImagen del controlador, que se encarga de:
+ *      → Guardar el archivo en la base de datos
+ *      → Responder con la URL del archivo subido
+ */
+router.post('/file/upload', subida.single('file'), (req, res, next) => {//con middleware para recibir archivo del formulario
+    console.log("Archivo recibido por multer:", req.file);
+    next();
+}, SubirImagen);
+
+
+/*
+ * Ruta GET para descargar archivos
+ * Endpoint: /file/:filename
+ * Descripción:
+ *  - Se activa cuando un cliente solicita un archivo específico.
+ *  - Llama a la función BajarImagen del controlador, que se encarga de:
+ *      → Buscar el archivo en la base de datos
+ *      → Responder con el archivo para su descarga
+ */
+router.get('/file/:filename', BajarImagen);
+
+/**
+ * Ruta POST: /create
+ * Descripción:
+ *  - Crea un nuevo post.
+ *  - Requiere autenticación mediante JWT.
+ *  - Llama al controlador CrearPost.
+ * Flujo:
+ *  → Verifica el token JWT con AuthenticateToken
+ *  → Inserta los datos del post en la base de datos
+ *  → Devuelve confirmación
+ */
+router.post('/create', AuthenticateToken, CrearPost);
+
+// Exportación del router para ser utilizado en el index.js
 export default router;
