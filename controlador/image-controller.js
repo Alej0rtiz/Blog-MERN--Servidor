@@ -40,7 +40,12 @@ export const BajarImagen = async (request, response) => {
 
     try {
         // Búsqueda del archivo por su nombre
+        console.log("Intentando descargar archivo con nombre:", request.params.filename);
         const file = await gfs.files.findOne({ filename: request.params.filename });
+
+        if (!file) {//validacion de que haya un archivo
+            return response.status(404).json({ message: 'Archivo no encontrado' });
+        }
 
         // Stream de descarga abierto por el ID del archivo
         const readStream = gridBucket.openDownloadStream(file._id);
@@ -54,5 +59,4 @@ export const BajarImagen = async (request, response) => {
         return response.status(500).json({ message: 'Error al descargar la imagen' });
 
     }
-
 };

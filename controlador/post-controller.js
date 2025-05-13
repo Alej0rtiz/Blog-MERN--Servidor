@@ -13,3 +13,28 @@ export const CrearPost = async (request, response) => {
         return response.status(500).json({message: error.message});
     }
 }
+
+export const MostrarTodosPosts = async (request, response) => {
+    
+    let category = request.query.category;
+
+    let posts;
+
+    try {
+        // Si hay categoría en la query, filtrar por esa categoría
+        if (category){
+
+            posts = await Post.find({categories: category});
+
+        }else{
+
+        posts = await Post.find({});
+
+        }
+        return response.status(200).json(posts);
+
+    } catch (error) {
+        return response.status(500).json({message: error.message});
+    }
+
+}

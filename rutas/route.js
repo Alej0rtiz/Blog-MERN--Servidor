@@ -8,7 +8,7 @@ import {signupUser, loginUser} from '../controlador/user-controller.js';
 // Importación de la función del controlador para la subida y bajada de imagenes
 import { SubirImagen, BajarImagen } from '../controlador/image-controller.js';
 // Importación de la función del controlador para crear un nuevo post
-import { CrearPost } from '../controlador/post-controller.js';
+import { CrearPost, MostrarTodosPosts } from '../controlador/post-controller.js';
 
 // Importación de la función de autenticación de tokens
 import { AuthenticateToken } from '../controlador/jwt-controller.js';
@@ -92,6 +92,21 @@ router.get('/file/:filename', BajarImagen);
  *  → Devuelve confirmación
  */
 router.post('/create', AuthenticateToken, CrearPost);
+
+/*
+ * Ruta GET: /posts
+ * Descripción:
+ *  - Obtiene todos los posts.
+ *  - Requiere autenticación mediante JWT.
+ *  - Llama al controlador getAllPosts.
+ * Flujo:
+ *  → Verifica el token JWT con AuthenticateToken
+ *  → Recupera los posts de la base de datos
+ *  → Devuelve la lista de posts
+ */
+router.get('/posts', AuthenticateToken, MostrarTodosPosts);
+
+
 
 // Exportación del router para ser utilizado en el index.js
 export default router;
