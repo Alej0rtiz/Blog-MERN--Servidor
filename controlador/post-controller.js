@@ -38,3 +38,17 @@ export const MostrarTodosPosts = async (request, response) => {
     }
 
 }
+
+export const MostrarPost = async (request, response) => {
+
+    try {
+        //busca por id el post correspondiente y lo retorna
+        const post = await Post.findById(request.params.id);
+
+        return response.status(200).json(post);
+
+    } catch (error) {
+        return response.status(500).json({message: error.message});
+    }
+
+}
