@@ -8,7 +8,7 @@ import {signupUser, loginUser} from '../controlador/user-controller.js';
 // Importación de la función del controlador para la subida y bajada de imagenes
 import { SubirImagen, BajarImagen } from '../controlador/image-controller.js';
 // Importación de la función del controlador para crear un nuevo post
-import { CrearPost, MostrarTodosPosts, MostrarPost  } from '../controlador/post-controller.js';
+import { CrearPost, MostrarTodosPosts, MostrarPost, ActualizarPost, BorrarPost } from '../controlador/post-controller.js';
 
 // Importación de la función de autenticación de tokens
 import { AuthenticateToken } from '../controlador/jwt-controller.js';
@@ -119,6 +119,34 @@ router.get('/posts', AuthenticateToken, MostrarTodosPosts);
  *  → Devuelve el post solicitado
  */
 router.get('/post/:id', AuthenticateToken, MostrarPost);
+
+
+/*
+ * Ruta PUT: /update/:id
+ * Descripción:
+ *  - Actualiza un post existente.
+ *  - Requiere autenticación mediante JWT.
+ *  - Llama al controlador ActualizarPost.
+ * Flujo:
+ *  → Verifica el token JWT con AuthenticateToken
+ *  → Actualiza los datos del post en la base de datos
+ *  → Devuelve confirmación de la actualización
+ */
+router.put('/update/:id', AuthenticateToken, ActualizarPost);
+
+
+/*
+ * Ruta DELETE: /delete/:id
+ * Descripción:
+ *  - Elimina un post específico.
+ *  - Requiere autenticación mediante JWT.
+ *  - Llama al controlador BorrarPost.
+ * Flujo:
+ *  → Verifica el token JWT con AuthenticateToken
+ *  → Elimina el post de la base de datos
+ *  → Devuelve confirmación de la eliminación
+ */
+router.delete('/delete/:id', AuthenticateToken, BorrarPost);
 
 
 // Exportación del router para ser utilizado en el index.js

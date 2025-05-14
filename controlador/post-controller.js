@@ -14,8 +14,10 @@ export const CrearPost = async (request, response) => {
     }
 }
 
+// Obtiene todos los posts. Si se pasa una categoría como query param (?category=...), filtra por dicha categoría
 export const MostrarTodosPosts = async (request, response) => {
     
+    // Obtiene el valor del parámetro 'category' desde la URL
     let category = request.query.category;
 
     let posts;
@@ -27,7 +29,7 @@ export const MostrarTodosPosts = async (request, response) => {
             posts = await Post.find({categories: category});
 
         }else{
-
+        //si no, retorna todos los posts
         posts = await Post.find({});
 
         }
@@ -39,6 +41,7 @@ export const MostrarTodosPosts = async (request, response) => {
 
 }
 
+// Retorna un post específico a partir del ID proporcionado en los parámetros de la URL
 export const MostrarPost = async (request, response) => {
 
     try {
@@ -51,4 +54,46 @@ export const MostrarPost = async (request, response) => {
         return response.status(500).json({message: error.message});
     }
 
+}
+
+// Actualiza un post existente utilizando su ID y los nuevos datos enviados en el cuerpo de la solicitud
+export const ActualizarPost = async (request, response) => {
+
+    try {
+        const post = await Post.findById(request.params.id);
+
+        if (!post) {
+            return response.status(404).json({message: "Post no encontrado"});// Si no se encuentra, retorna error 404
+        }
+
+         // Actualiza el post con los nuevos datos. Solo se modifican los campos enviados en el cuerpo.
+        await Post.findByIdAndUpdate(request.params.id, { $set: request.body });
+
+        return response.status(200).json({message: "Post actualizado correctamente"});
+
+    } catch (error) {
+        return response.status(500).json({message: error.message});
+    }
+
+}
+
+// Elimina un post específico a partir de su ID
+export const BorrarPost = async (request, response) => {
+    
+    try {
+        
+        // Verifica si el post existe
+        const post = await Post.findById(request.params.id);
+
+        if (!post) {
+            return response.status(404).json({message: "Post no encontrado"});// Si no existe, responde con 404
+        }
+
+        await post.deleteOne();// Elimina el documento directamente
+
+        return response.status(200).json({message: "Post eliminado de forma exitosa"});
+
+    } catch (error) {
+        return response.status(500).json({message: error.message});
+    }
 }
