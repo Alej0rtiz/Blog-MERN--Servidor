@@ -9,7 +9,8 @@ import {signupUser, loginUser} from '../controlador/user-controller.js';
 import { SubirImagen, BajarImagen } from '../controlador/image-controller.js';
 // Importación de la función del controlador para crear un nuevo post
 import { CrearPost, MostrarTodosPosts, MostrarPost, ActualizarPost, BorrarPost } from '../controlador/post-controller.js';
-
+// Importación de la función del controlador para crear un nuevo comentario
+import { NuevoComentario, MostrarComentarios, BorrarComentario } from '../controlador/comment-controller.js';
 // Importación de la función de autenticación de tokens
 import { AuthenticateToken } from '../controlador/jwt-controller.js';
 
@@ -147,6 +148,47 @@ router.put('/update/:id', AuthenticateToken, ActualizarPost);
  *  → Devuelve confirmación de la eliminación
  */
 router.delete('/delete/:id', AuthenticateToken, BorrarPost);
+
+/*
+    * Ruta POST: /comment/new
+    * Descripción:
+    *  - Crea un nuevo comentario.
+    *  - Requiere autenticación mediante JWT.
+    *  - Llama al controlador NuevoComentario.
+    * Flujo:
+    *  → Verifica el token JWT con AuthenticateToken
+    *  → Inserta el comentario en la base de datos
+    *  → Devuelve confirmación
+    */
+router.post('/comment/new', AuthenticateToken, NuevoComentario);
+
+/*
+ * Ruta GET: /comments/:id
+ * Descripción:
+ *  - Obtiene todos los comentarios de un post específico.
+ *  - Requiere autenticación mediante JWT.
+ *  - Llama al controlador MostrarComentarios.
+ * Flujo:
+ *  → Verifica el token JWT con AuthenticateToken
+ *  → Recupera los comentarios de la base de datos
+ *  → Devuelve la lista de comentarios
+ */
+
+router.get('/comments/:id', AuthenticateToken, MostrarComentarios);
+
+
+/*
+ * Ruta DELETE: /comment/delete/:id
+ * Descripción:
+ *  - Elimina un comentario específico.
+ *  - Requiere autenticación mediante JWT.
+ *  - Llama al controlador BorrarComentario.
+ * Flujo:
+ *  → Verifica el token JWT con AuthenticateToken
+ *  → Elimina el comentario de la base de datos
+ *  → Devuelve confirmación de la eliminación
+ */
+router.delete('/comment/delete/:id', AuthenticateToken, BorrarComentario);
 
 
 // Exportación del router para ser utilizado en el index.js

@@ -10,7 +10,7 @@ const TokenSchema = mongoose.Schema({
         }
     })
 
-//modelo de "User" a partir del esquema definido, permitirá interactuar con la colección de tokens en Mongo
+//modelo de "Token" a partir del esquema definido, permitirá interactuar con la colección de tokens en Mongo
 const Token = mongoose.model('token', TokenSchema);
 
 //export del modelo
