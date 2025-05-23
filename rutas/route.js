@@ -2,9 +2,7 @@
 import express from 'express';
 
 // Importación de las funciones del controlador de usuarios
-// - signupUser: lógica para registrar un nuevo usuario
-// - loginUser: lógica para autenticar al usuario existente
-import {signupUser, loginUser} from '../controlador/user-controller.js';
+import {signupUser, loginUser, refreshToken, logoutUser} from '../controlador/user-controller.js';
 // Importación de la función del controlador para la subida y bajada de imagenes
 import { SubirImagen, BajarImagen } from '../controlador/image-controller.js';
 // Importación de la función del controlador para crear un nuevo post
@@ -189,6 +187,10 @@ router.get('/comments/:id', AuthenticateToken, MostrarComentarios);
  *  → Devuelve confirmación de la eliminación
  */
 router.delete('/comment/delete/:id', AuthenticateToken, BorrarComentario);
+
+router.post('/token/refresh', refreshToken);
+
+router.post('/logout', logoutUser);
 
 
 // Exportación del router para ser utilizado en el index.js

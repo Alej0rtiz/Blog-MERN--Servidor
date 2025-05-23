@@ -20,8 +20,12 @@ export const AuthenticateToken = (request, response, next) => {
     jwt.verify(token, process.env.JWT_SECRET, (error, user) => {
 
         if (error) {
-            return response.status(403).json({ message: 'Token no válido' });
-        }
+            // Si el token expiró, devolver 401 para permitir renovación
+            if (error.name === 'TokenExpiredError') {
+                return response.status(401).json({ message: 'Token expirado' });
+            }
+                return response.status(403).json({ message: 'Token no válido' });
+            }
 
         //token valido:
         request.user = user; // Almacena la información del usuario en la solicitud
