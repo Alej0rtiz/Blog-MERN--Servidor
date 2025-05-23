@@ -2,7 +2,7 @@
 import express from 'express';
 
 // Importación de las funciones del controlador de usuarios
-import {signupUser, loginUser, refreshToken, logoutUser} from '../controlador/user-controller.js';
+import {signupUser, loginUser, refreshToken, logoutUser, getUserProfile} from '../controlador/user-controller.js';
 // Importación de la función del controlador para la subida y bajada de imagenes
 import { SubirImagen, BajarImagen } from '../controlador/image-controller.js';
 // Importación de la función del controlador para crear un nuevo post
@@ -191,6 +191,8 @@ router.delete('/comment/delete/:id', AuthenticateToken, BorrarComentario);
 router.post('/token/refresh', refreshToken);
 
 router.post('/logout', logoutUser);
+
+router.get('/profile', AuthenticateToken, getUserProfile);
 
 
 // Exportación del router para ser utilizado en el index.js

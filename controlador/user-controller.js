@@ -13,19 +13,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 
-// ====================================================
-//       CONTROLADOR PARA REGISTRAR UN NUEVO USUARIO
-// ====================================================
-
-/*
- * signupUser: Función asincrónica que registra un nuevo usuario.
- * 
- * Funcionalidad:
- *  - Recibe los datos del usuario desde el body de la solicitud (username, name, password).
- *  - Encripta la contraseña usando bcrypt.
- *  - Crea y guarda un nuevo documento en la colección "users" de MongoDB.
- *  - Retorna una respuesta exitosa si el proceso se completa correctamente.
- */
 export const signupUser = async (request, response) =>{
 
     try{
@@ -55,22 +42,6 @@ export const signupUser = async (request, response) =>{
     }
 }
 
-// ====================================================
-//           CONTROLADOR PARA INICIAR SESIÓN
-// ====================================================
-
-/*
- * loginUser: Función asincrónica que autentica a un usuario existente.
- * 
- * Funcionalidad:
- *  - Busca al usuario en la base de datos mediante su username.
- *  - Verifica la contraseña usando bcrypt.compare.
- *  - Si es válida, genera:
- *      → Access Token: válido por 15 minutos.
- *      → Refresh Token: válido por 7 días.
- *  - Guarda el refresh token en la base de datos.
- *  - Responde con los tokens y datos del usuario.
- */
 
 export const loginUser = async (request, response) => {
 
@@ -161,4 +132,19 @@ export const logoutUser = async (request, response) => {
     } catch (error) {
         return response.status(500).json({ message: "Error al cerrar sesión" });
     }
+}
+
+export const getUserProfile = async (request, response) => {
+    
+    try {
+        const user = await User.findById(request.user._id).select('-password');
+        console.log("usuario:",user);
+        if (!user) {
+            return response.status(404).json({ message: 'Usuario no encontrado' });
+        }
+        return response.status(200).json(user);
+    } catch (error) {
+        return response.status(500).json({ message: 'Error al obtener el perfil del usuario' });
+    }
+
 }
