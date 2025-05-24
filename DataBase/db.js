@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 const Connection = async (user, passkey) => {
 
     // Se interpolan las variables 'user' y 'passkey' en la URL
-    const URL = `mongodb+srv://${user}:${passkey}@blog-aplication.stbxi9o.mongodb.net/?retryWrites=true&w=majority&appName=Blog-aplication`    
+    const URL = process.env.MONGO_URI;    
 
     //conectar a la base de datos usando mongoose
     try {

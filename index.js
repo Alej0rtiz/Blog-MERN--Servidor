@@ -24,14 +24,11 @@ import Connection from './DataBase/db.js';
 const app = express();
 
 //puerto de levantamiento del servidor
-const PORT = 8000;
-
-//usuario y contraseña de la URI para la conexion de la DB (variables de entorno)
-const USER = process.env.DB_USER;
-const PASS = process.env.DB_PASS;
+const PORT = process.env.PORT || 8000;
 
 // Habilita CORS para permitir peticiones entre diferentes dominios
-app.use(cors());
+app.use(cors({origin: true, credentials: true}));
+
 // Configura el body-parser para manejar solicitudes en formato JSON y urlencoded
 app.use(bodyParser.json({extended: true}));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -43,4 +40,4 @@ app.use('/', Router);
 app.listen(PORT, () => console.log(`Servidor ejecutandose de forma exitosa en PORT ${PORT}`))
 
 //conexion a la base de datos
-Connection(USER, PASS);
+Connection();

@@ -6,14 +6,13 @@ import dotenv from 'dotenv';
 
 dotenv.config(); //carga de variables de entorno
 
-const user = process.env.DB_USER;
-const pass = process.env.DB_PASS;
+
 
 
 //configuracion del almacenamiento con gridFS
 const storage = new GridFsStorage({
 
-    url: `mongodb+srv://${user}:${pass}@blog-aplication.stbxi9o.mongodb.net/?retryWrites=true&w=majority&appName=Blog-aplication`,
+    url: process.env.MONGO_URI,
     options: { useNewUrlParser: true},// Evita warnings en la conexión
     file: (request, file) => {
         const match = ["image/png", "image/jpg", "image/jpeg"];
