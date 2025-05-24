@@ -2,7 +2,7 @@ import grid from 'gridfs-stream';
 import mongoose from 'mongoose';
 
 // URL base del servidor para construir las URLs de los archivos
-const url = 'http://localhost:8000';
+const url = 'https://blog-mern-devsim-servidor.onrender.com:8000';
 
 // Declaración de variables globales para GridFS y GridFSBucket
 let gfs, gridBucket;
