@@ -27,7 +27,23 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 
 // Habilita CORS para permitir peticiones entre diferentes dominios
-app.use(cors({origin: true, credentials: true}));
+const allowedOrigins = [
+    'https://devsim-blog.vercel.app', // Frontend en producción
+    'http://localhost:3000'           // Para desarrollo local
+];
+
+app.use(cors({
+    origin: function (origin, callback) {
+    if   (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+    }   else {
+            callback(new Error('No permitido por CORS'));
+        }
+    },
+    credentials: true,
+}));
+
+
 
 // Configura el body-parser para manejar solicitudes en formato JSON y urlencoded
 app.use(bodyParser.json({extended: true}));
