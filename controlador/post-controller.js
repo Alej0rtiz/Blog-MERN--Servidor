@@ -17,22 +17,33 @@ export const CrearPost = async (request, response) => {
 // Obtiene todos los posts. Si se pasa una categoría como query param (?category=...), filtra por dicha categoría
 export const MostrarTodosPosts = async (request, response) => {
     
-    // Obtiene el valor del parámetro 'category' desde la URL
     let category = request.query.category;
 
-    let posts;
+    const sort = request.query.sort; //newest u oldest
+
+    let filter = {};
+
+    if (category) {
+        filter.categories = category;
+    }
+
+    // Define el orden de los posts según el valor de sort
+    let sortOption = {};
+
+    if (sort === "oldest"){
+
+        sortOption.creationDate = 1; //ascendente
+
+    }else {
+
+        sortOption.creationDate = -1; //descendente
+
+    }
 
     try {
-        // Si hay categoría en la query, filtrar por esa categoría
-        if (category){
 
-            posts = await Post.find({categories: category});
+        const posts = await Post.find(filter).sort(sortOption);
 
-        }else{
-        //si no, retorna todos los posts
-        posts = await Post.find({});
-
-        }
         return response.status(200).json(posts);
 
     } catch (error) {
